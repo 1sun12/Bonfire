@@ -109,7 +109,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Library signals
     connect(m_library, &LibraryWidget::openShard,      this, &MainWindow::navigateEditor);
-    connect(m_library, &LibraryWidget::requestNewShard,this, &MainWindow::openQuickCapture);
+    connect(m_library, &LibraryWidget::requestNewShard,this, [this]{ navigateEditor(); });
 
     // Editor signals
     connect(m_editor, &ShardEditorWidget::backRequested, this, &MainWindow::navigateLibrary);
