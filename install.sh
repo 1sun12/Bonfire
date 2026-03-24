@@ -41,9 +41,22 @@ else
     ICON_VALUE="accessories-text-editor"
 fi
 
+# ---- Ensure hicolor index.theme exists at user level ----
+# Required by the freedesktop icon spec — without it many launchers
+# (including COSMIC) won't recognise the user hicolor directory.
+HICOLOR_USER="$HOME/.local/share/icons/hicolor"
+if [ ! -f "$HICOLOR_USER/index.theme" ]; then
+    if [ -f "/usr/share/icons/hicolor/index.theme" ]; then
+        cp /usr/share/icons/hicolor/index.theme "$HICOLOR_USER/index.theme"
+        echo "OK  index.theme copied to $HICOLOR_USER"
+    else
+        echo "WARN  Could not find system hicolor/index.theme — icon may not appear in launcher"
+    fi
+fi
+
 # ---- Refresh icon cache ----
 if command -v gtk-update-icon-cache &>/dev/null; then
-    gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" 2>/dev/null && \
+    gtk-update-icon-cache -f -t "$HICOLOR_USER" 2>/dev/null && \
     echo "OK  Icon cache refreshed"
 fi
 
