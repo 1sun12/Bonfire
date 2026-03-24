@@ -93,10 +93,36 @@ The compiled binary will be at `build/Bonfire` (or `build/Bonfire.exe` on Window
 
 ---
 
+### Install (Linux)
+
+After building, run the included install script from the project root:
+
+```bash
+bash install.sh
+```
+
+This will:
+- Create a symlink at `~/.local/bin/bonfire` so you can launch the app from any terminal by typing `bonfire`
+- Write a `.desktop` entry to `~/.local/share/applications/bonfire.desktop` so Bonfire appears in your application launcher and can be searched like any installed app
+- Refresh the desktop database automatically
+
+If `~/.local/bin` is not in your `PATH`, the script will tell you. Add this to your `~/.bashrc` or `~/.zshrc` and restart your terminal:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+After that, running `bonfire` from any terminal will launch the app.
+
+> **Note:** The symlink points to the binary inside the `build/` directory. If you recompile, the symlink automatically picks up the new binary — no need to re-run `install.sh`.
+
+---
+
 ### Run
 
 ```bash
-./build/Bonfire
+./build/Bonfire   # direct
+bonfire           # after running install.sh
 ```
 
 Data is stored at:
