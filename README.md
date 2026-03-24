@@ -267,7 +267,9 @@ Each shard is stored as a row in a local SQLite database. The JSON export format
 
 ## AI Assistance
 
-This project was built with the assistance of **Claude Opus 4.6** by Anthropic, used via [Claude Code](https://claude.ai/claude-code) — Anthropic's AI-powered CLI for software development.
+This project was built with the assistance of **Claude Opus 4.6** by Anthropic, used via [Claude Code](https://claude.ai/claude-code).
+
+Although AI was used, I take the originality of my work very seriously and am always transparent in my work where AI was used and how.
 
 ---
 
