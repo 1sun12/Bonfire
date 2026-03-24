@@ -1,13 +1,16 @@
 #!/bin/bash
 # Bonfire post-build installer
-# Creates a terminal symlink and desktop launcher entry.
+# Creates a terminal symlink, installs the app icon, and writes a desktop launcher entry.
 # Run from the project root after compiling: bash install.sh
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BINARY="$SCRIPT_DIR/build/Bonfire"
+ICON_SRC="$SCRIPT_DIR/bonfire-image.png"
 LINK_DIR="$HOME/.local/bin"
+ICON_DIR="$HOME/.local/share/icons/hicolor/512x512/apps"
+ICON_DEST="$ICON_DIR/bonfire.png"
 DESKTOP_DIR="$HOME/.local/share/applications"
 DESKTOP_FILE="$DESKTOP_DIR/bonfire.desktop"
 
@@ -21,11 +24,28 @@ fi
 
 # ---- Directories ----
 mkdir -p "$LINK_DIR"
+mkdir -p "$ICON_DIR"
 mkdir -p "$DESKTOP_DIR"
 
 # ---- Terminal symlink ----
 ln -sf "$BINARY" "$LINK_DIR/bonfire"
 echo "OK  Symlink:  $LINK_DIR/bonfire -> $BINARY"
+
+# ---- Icon ----
+if [ -f "$ICON_SRC" ]; then
+    cp "$ICON_SRC" "$ICON_DEST"
+    echo "OK  Icon:     $ICON_DEST"
+    ICON_VALUE="bonfire"
+else
+    echo "WARN  bonfire-image.png not found in project root, using fallback icon"
+    ICON_VALUE="accessories-text-editor"
+fi
+
+# ---- Refresh icon cache ----
+if command -v gtk-update-icon-cache &>/dev/null; then
+    gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" 2>/dev/null && \
+    echo "OK  Icon cache refreshed"
+fi
 
 # ---- Desktop entry ----
 cat > "$DESKTOP_FILE" <<EOF
@@ -33,7 +53,7 @@ cat > "$DESKTOP_FILE" <<EOF
 Name=Bonfire
 Comment=Developer syntax recall and spaced repetition
 Exec=$BINARY
-Icon=accessories-text-editor
+Icon=$ICON_VALUE
 Terminal=false
 Type=Application
 Categories=Development;Education;
